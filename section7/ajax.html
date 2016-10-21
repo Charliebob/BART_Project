@@ -1,0 +1,163 @@
+<!-- 
+ajax.html
+AJAX section example by Alain Ibrahim 
+-->
+
+<!DOCTYPE html>
+<head>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+
+// Set a placeholder for an XMLHttpRequest object    
+var xhr = null;
+
+// Returns a new XMLHttpRequest object
+function createHttpRequest() {
+    // instantiate XMLHttpRequest object
+    try {
+        xhr = new XMLHttpRequest();
+        // return XMLHttpRequest object for non-Microsoft browsers
+        return xhr;
+    }
+    catch (e) {
+        xhr = new ActiveXObject("Microsoft.XMLHTTP");
+        // return XMLHttpRequest object for IE5 and IE6
+        return xhr;
+    }
+
+}
+
+
+function getText() {
+
+    // placeholder for string of parameters
+    params = "i_want_text=yes";
+    
+    // The URL to the server-side script
+    url = "ajax.php";
+    // Get a new XMLHttpRequest object
+    xhr = createHttpRequest();
+    // create post request
+    xhr.open("POST", url, true);
+    // set content-type 
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    // set content length with given post paramters string
+    xhr.setRequestHeader("Content-length", params.length);
+    // make sure the http connection is closed after the response has been sent
+    xhr.setRequestHeader("Connection", "close");
+    // on response state change call the handler
+    xhr.onreadystatechange = getTextHandler;
+    // send the post variables to the server
+    xhr.send(params);
+
+}
+
+function getTextHandler() {
+    // only handle loaded requests
+    if (xhr.readyState == 4) {
+        if (xhr.status == 200)
+            // alert the response from server
+            alert(xhr.responseText);
+        else 
+            alert("Error with Ajax call!");
+    }
+
+}
+
+function getXMLObject() {
+
+    // placeholder for string of parameters
+    params = "i_want_xml=yes";
+    
+    // The URL to the server-side script
+    url = "ajax.php";
+    // Get a new XMLHttpRequest object
+    xhr = createHttpRequest();
+    // create post request
+    xhr.open("POST", url, true);
+    // set content-type 
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    // set content length with given post paramters string
+    xhr.setRequestHeader("Content-length", params.length);
+    // make sure the http connection is closed after the response has been sent
+    xhr.setRequestHeader("Connection", "close");
+    // on response state change call the handler
+    xhr.onreadystatechange = getXMLObjectHandler;
+    // send the post variables to the server
+    xhr.send(params);
+
+}
+
+function getXMLObjectHandler() {
+    
+    // only handle loaded requests
+    if (xhr.readyState == 4) {
+        if (xhr.status == 200)
+            // alert the response from server
+            alert(xhr.responseXML);
+        else 
+            alert("Error with Ajax call!");
+    }
+
+}
+
+function getXMLText() {
+
+    // placeholder for string of parameters
+    params = "i_want_xml=yes";
+    
+    // The URL to the server-side script
+    url = "ajax.php";
+    // Get a new XMLHttpRequest object
+    xhr = createHttpRequest();
+    // create post request
+    xhr.open("POST", url, true);
+    // set content-type 
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    // set content length with given post paramters string
+    xhr.setRequestHeader("Content-length", params.length);
+    // make sure the http connection is closed after the response has been sent
+    xhr.setRequestHeader("Connection", "close");
+    // on response state change call the handler
+    xhr.onreadystatechange = getXMLTextHandler;
+    // send the post variables to the server
+    xhr.send(params);
+
+}
+
+function getXMLTextHandler() {
+    
+    // only handle loaded requests
+    if (xhr.readyState == 4) {
+        if (xhr.status == 200) {
+            // alert the response from server
+            text_tag_values = xhr.responseXML.getElementsByTagName("text");
+            for (i=0;i<text_tag_values.length;i++) {
+                alert(text_tag_values[i].firstChild.nodeValue);
+            }
+        } 
+        else 
+            alert("Error with Ajax call!");
+    }
+
+}
+
+$(document).ready(function() {
+  // Handler for .ready() called.
+
+});
+
+function useJQuery() {
+    $.ajax({
+        type: 'POST',
+        url: "ajax.php",
+        data: { i_want_text:'yes' },
+        success: function (response) { alert(response); },
+    });
+}
+
+</script>
+</head>
+<body onload="getText();">
+</body>
+</html>

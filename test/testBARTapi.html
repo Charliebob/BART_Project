@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <title>Simple Map</title>
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.11.2/css/bootstrap-select.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.11.2/js/bootstrap-select.min.js"></script>
+
+  </head>
+  <body>
+      <div class="container">
+        <!--<div class="jumbotron"> -->
+        <h1 class="text-center page-header">BART Real-Time System Project</h1>
+        <p class="text-center">This is some text.</p>
+      </div>
+
+      <div class="container">
+        <h4>Select Route</h4>
+        <div class="dropdown">
+
+          <select onchange="getLocation()" id="myselect" class="selectpicker" data-style="btn-info">
+            <option value="0" >--Please Select--</option>
+            <option value="1" data-subtext="PITT-SFIA">Route 1</option>
+            <option value="2" data-subtext="SFIA-PITT">Route 2</option>
+            <option value="3" data-subtext="WARM-RICH">Route 3</option>
+            <option value="4" data-subtext="RICH-WARM">Route 4</option>
+            <option value="5" data-subtext="WARM-DALY">Route 5</option>
+            <option value="6" data-subtext="DALY-WARM">Route 6</option>
+            <option value="7" data-subtext="RICH-MLBR">Route 7</option>
+            <option value="8" data-subtext="MLBR-RICH">Route 8</option>
+            <option data-divider="true"></option>
+            <option value="11" data-subtext="DUBL-DALY">Route 11</option>
+            <option value="12" data-subtext="DALY-DUBL">Route 12</option>
+            <option value="19" data-subtext="COLS-OAKL">Route 19</option>
+            <option value="20" data-subtext="OAKL-COLS">Route 20</option>
+          </select>
+      </div>
+      <script type="text/javascript" src="loadLocationID.js"></script>
+      <script type="text/javascript">
+        var routeID="";
+        var result;
+        var getTime="";
+
+
+        function getLocation(){
+          var get_id = document.getElementById('myselect');
+          var routeSelected = get_id.options[get_id.selectedIndex].value;
+          if(routeSelected!=0){
+            routeID = "route"+routeSelected;
+            result = LoadLocationID(routeID); //route each station
+
+
+
+            for(i=1; i<result.length; i++){
+              var stationAbbr = result[i][0];
+              var destination = result[result.length-1][0];
+              alert(stationAbbr);
+
+              var xhr = new XMLHttpRequest();
+              xhr.onreadystatechange = function(){
+                if(this.readyState == 4 && this.status == 200){
+                  var xmlDoc = this.responseXML.documentElement;
+                  var x = xmlDoc.getElementsByTagName('abbreviation');
+
+
+                  for(j=0; j<x.length; j++){
+                    var eachRoute = x[j];
+                    var y = get_nextsibling(eachRoute);
+                    var z = get_nextsibling(y);
+                    if(eachRoute.textContent == destination){
+                      var arrivalTime = z.childNodes[0].textContent
+                      alert(stationAbbr+ " "+eachRoute.textContent + " " + arrivalTime + " "+destination);
+                      break;
+                    }
+                  }
+
+                }
+              }
+              var URL = "http://api.bart.gov/api/etd.aspx?cmd=etd&orig="+stationAbbr+"&key=Z74P-57S9-865T-DWE9";
+              xhr.open("GET",URL, false); //real time estimate
+              xhr.send(null);
+
+            }
+          }
+        }
+        function get_nextsibling(n) {
+            var x = n.nextSibling;
+            while (x.nodeType != 1) {
+                x = x.nextSibling;
+            }
+            return x;
+        }
+
+      </script>
+
+</div>
+      <h5>The origin station is: </h5>
+      <p id="demo" class="well well-sm"></p>
+      <p id="locoo" class="well well-sm"></p>
+
+  </body>
+
+</html>

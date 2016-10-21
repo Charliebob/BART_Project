@@ -1,0 +1,27 @@
+<root>
+<uri>
+<![CDATA[
+http://api.bart.gov/api/route.aspx?cmd=routeinfo&route=19
+]]>
+</uri>
+<sched_num>39</sched_num>
+<routes>
+<route>
+<name>Coliseum - Oakland Int'l Airport</name>
+<abbr>COLS-OAKL</abbr>
+<routeID>ROUTE 19</routeID>
+<number>19</number>
+<origin>COLS</origin>
+<destination>OAKL</destination>
+<direction>north</direction>
+<color>#d5cfa3</color>
+<holidays>1</holidays>
+<num_stns>2</num_stns>
+<config>
+<station>COLS</station>
+<station>OAKL</station>
+</config>
+</route>
+</routes>
+<message/>
+</root>
